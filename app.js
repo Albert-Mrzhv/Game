@@ -7,6 +7,14 @@ const textEnd = document.createElement('div');
 textEnd.classList.add('text');
 textEnd.style.cursor = 'auto';
 
+const choosingTimeText = document.createElement('div');
+const blockForTime = document.createElement('div');
+blockForTime.classList.add('block-for-time');
+const choosingTime = document.createElement('div');
+const choosingTimeSecond = document.createElement('div');
+const choosingTimeThree = document.createElement('div');
+
+
 const blockSecond = document.createElement('div');
 blockSecond.classList.add('block-second');
 
@@ -14,32 +22,76 @@ const restart = document.createElement('div');
 restart.classList.add('text-restart');
 
 blockSecond.append(textEnd);
-block.append(circle, text, blockSecond);
+blockForTime.append(choosingTime, choosingTimeSecond, choosingTimeThree)
+block.append(choosingTimeText, blockForTime, circle, text, blockSecond);
 
 const time = document.querySelector('[data-time]');
-let count = 30;
+let count = null;
 let glasses = 0;
 
-text.addEventListener('click', () => {
+function chooseTime(count) {
     circle.classList.add('circle');
     text.textContent = '';
-    glasses = 0
+    glasses = 0;
     const updateTime = () => {
         if (count >= 0) {
             time.textContent = count < 4 ? `Игра завершится через ${count--} секунды` : `Игра завершится через ${count--} секунд`
         } else {
-            clearInterval(interval)
-            count = 30
+            clearInterval(interval);
+            count = count;
             circle.classList.remove('circle');
-            textEnd.textContent = `Вы набрали ${glasses} очков!`
-            restart.textContent = 'Перезапустить игру'
-            blockSecond.appendChild(restart)
+            textEnd.textContent = `Вы набрали ${glasses} очков!`;
+            restart.textContent = 'Перезапустить игру';
+            blockSecond.appendChild(restart);
             block.removeChild(circle, text);
         }
     };
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
+}
+
+function removeStyles() {
+    choosingTime.textContent = ''
+    choosingTime.classList.remove('choosing-time');
+    choosingTimeSecond.textContent = ''
+    choosingTimeSecond.classList.remove('choosing-time');
+    choosingTimeThree.textContent = ''
+    choosingTimeThree.classList.remove('choosing-time');
+}
+
+text.addEventListener('click', () => {
+    choosingTimeText.classList.add('choosing-time-text');
+    block.classList.add('new-block')
+    choosingTimeText.textContent = 'Выберите время:'
+    choosingTime.textContent = '10сек'
+    choosingTime.classList.add('choosing-time');
+    choosingTimeSecond.textContent = '20сек'
+    choosingTimeSecond.classList.add('choosing-time');
+    choosingTimeThree.textContent = '30сек'
+    choosingTimeThree.classList.add('choosing-time');
+    text.textContent = '';
+})
+
+choosingTime.addEventListener('click', () => {
+    choosingTimeText.textContent = ''
+    removeStyles()
+    chooseTime(10)
+    block.append(circle);
+})
+
+choosingTimeSecond.addEventListener('click', () => {
+    choosingTimeText.textContent = ''
+    removeStyles()
+    chooseTime(20)
+    block.append(circle);
+})
+
+choosingTimeThree.addEventListener('click', () => {
+    choosingTimeText.textContent = ''
+    removeStyles()
+    chooseTime(30)
+    block.append(circle);
 })
 
 const marginHorizontal = 400;
@@ -62,27 +114,27 @@ function createAndPlaceRandomCircle(circlHoris, circlVert) {
 
 restart.addEventListener('click', () => {
     circle.classList.add('circle');
-    block.append(circle, text);
     textEnd.textContent = '';
     restart.textContent = '';
-    glasses = 0
+    circle.style.left = '';
+    circle.style.top = '';
+    circle.style.width = '';
+    circle.style.height = '';
+    circle.style.backgroundColor = '';
+    glasses = 0;
+    time.textContent = ''
 
-    const updateTime = () => {
-        if (count >= 0) {
-            time.textContent = count < 4 ? `Игра завершится через ${count--} секунды` : `Игра завершится через ${count--} секунд`
-        } else {
-            clearInterval(intervalP)
-            count = 30
-            circle.classList.remove('circle');
-            textEnd.textContent = `Вы набрали ${glasses} очков!`
-            restart.textContent = 'Перезапустить игру'
-            blockSecond.appendChild(restart)
-            block.removeChild(circle, text);
-        }
-    };
+    choosingTimeText.classList.add('choosing-time-text');
+    block.classList.add('new-block')
+    choosingTimeText.textContent = 'Выберите время:'
+    choosingTime.textContent = '10сек'
+    choosingTime.classList.add('choosing-time');
+    choosingTimeSecond.textContent = '20сек'
+    choosingTimeSecond.classList.add('choosing-time');
+    choosingTimeThree.textContent = '30сек'
+    choosingTimeThree.classList.add('choosing-time');
 
-    updateTime();
-    const intervalP = setInterval(updateTime, 1000);
+
 })
 
 circle.addEventListener('mousedown', () => {
